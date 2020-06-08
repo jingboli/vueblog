@@ -1,13 +1,15 @@
 package cc.lijingbo.vueblog.controller;
 
 
+import cc.lijingbo.vueblog.domain.ResponseWrapper;
+import cc.lijingbo.vueblog.entity.User;
 import cc.lijingbo.vueblog.service.UserService;
+import cn.hutool.core.lang.Assert;
+import org.apache.ibatis.executor.resultset.ResultSetWrapper;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * <p>
@@ -26,6 +28,19 @@ public class UserController {
 
     @GetMapping("/{id}")
     public Object test(@PathVariable("id") Long id){
-        return userService.getById(id);
+        User user = userService.getById(id);
+        Assert.notNull(user,"没有该用户");
+        return ResponseWrapper.succ(user);
+    }
+
+    @RequiresAuthentication
+    @GetMapping("/index")
+    public ResponseWrapper index(){
+        User user = userService.getById(1L);
+        return ResponseWrapper.succ(user);
+    }
+
+    public ResponseWrapper save(@Validated @RequestBody User user){
+        return ResponseWrapper.succ(user);
     }
 }

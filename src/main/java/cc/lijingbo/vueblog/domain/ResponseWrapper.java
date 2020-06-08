@@ -1,6 +1,8 @@
 package cc.lijingbo.vueblog.domain;
 
 
+import cn.hutool.json.JSONObject;
+
 public class ResponseWrapper {
     private String code;
     private String msg;
@@ -23,9 +25,10 @@ public class ResponseWrapper {
     }
 
     public static ResponseWrapper fail(String msg) {
+        JSONObject jsonObject = new JSONObject();
         ResponseWrapper responseWrapper = new ResponseWrapper();
         responseWrapper.setCode("1");
-        responseWrapper.setData(null);
+        responseWrapper.setData(jsonObject);
         responseWrapper.setMsg(msg);
         return responseWrapper;
     }
